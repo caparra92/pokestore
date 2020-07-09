@@ -162,7 +162,7 @@ export default {
     findPokemon(wordToSearch, pokemons) {
       return pokemons.filter(pokemon => {
         const regex = new RegExp(wordToSearch, 'gi');
-        console.log(pokemon[1].name.match(regex));
+        console.log(pokemon.name.find(wordToSearch));
       })
     }
   },

@@ -6,11 +6,29 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    products: 0
+    products: 0,
+    pokemons: [],
+    filter: {
+      query: ''
+    }
   },
   mutations: {
     recieveProducts(state, payload) {
       state.products = payload
+    },
+    receivePokemons(state, pokemons) {
+      state.pokemons = pokemons
+    },
+    setQuery(state, query) {
+      state.filter.query = query
+    }
+  },
+  getters: {
+    filteredPokemons(state) {
+      if (state.filter.query > 2) {
+        return state.pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(state.filter.query))
+      }
+      return state.pokemons
     }
   },
   actions: {
@@ -19,6 +37,7 @@ export default new Vuex.Store({
         axios.get(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${value.increment}`)
           .then(response => {
             resolve(response)
+            context.commit('receivePokemons', response.data.results)
           })
           .catch(error => {
             reject(error)
